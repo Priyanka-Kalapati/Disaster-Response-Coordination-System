@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Disaster Response Coordination System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(to right, #89f7fe, #66a6ff);
+      scroll-behavior: smooth;
+    }
+    nav {
+      background: #34495e;
+      padding: 10px 0;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      display: none;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background 0.4s, transform 0.3s;
+    }
+    nav a:hover {
+      background: #1abc9c;
+      transform: scale(1.1);
+    }
+    .container {
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+      flex: 1;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #2ecc71;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #27ae60;
+      transform: scale(1.05);
+    }
+    .hidden { display: none; }
+    .card {
+      background: white;
+      padding: 15px;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      width: 280px;
+      transition: transform 0.3s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .section-title {
+      background: #2c3e50;
+      padding: 10px;
+      border-radius: 10px;
+      color: #fff;
+      margin-top: 20px;
+    }
+    img {
+      width: 250px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .agents, .disasters, .helpline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    footer {
+      background: #2c3e50;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      width: 100%;
+    }
+    /* Backend Output */
+    .backend-flex {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+    .backend-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      width: 200px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+      text-align: center;
+    }
+    .backend-card:hover {
+      transform: translateY(-5px);
+    }
+    .backend-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    /* Modals */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      overflow: auto;
+    }
+    .modal-content {
+      background: white;
+      margin: 80px auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 60%;
+      position: relative;
+    }
+    .close {
+      color: red;
+      position: absolute;
+      top: 10px;
+      right: 25px;
+      font-size: 30px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="#" onclick="showSection('home')">Home</a>
+  <a href="#" onclick="showSection('about')">About</a>
+  <a href="#" onclick="showSection('disasters')">Disasters</a>
+  <a href="#" onclick="showSection('agents')">Agents</a>
+  <a href="#" onclick="showSection('backend')">Backend Output</a>
+  <a href="#" onclick="showSection('helpline')">Helpline</a>
+  <a href="#" onclick="logout()">Logout</a>
+</nav>
+
+<div class="container">
+  <!-- LOGIN -->
+  <div id="login">
+    <h1>Disaster Response System Login</h1>
+    <input type="text" id="name" placeholder="Enter your Name"><br>
+    <input type="email" id="email" placeholder="Enter your Email"><br>
+    <input type="tel" id="phone" placeholder="Enter your Phone"><br>
+    <button onclick="validateAndWelcome()">Enter</button>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="hidden">
+    <h1 id="welcomeMsg">Welcome to Disaster Response System</h1>
+    <p>This system provides real-time coordination for natural and man-made disasters to ensure safety and quick response.</p>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="about" class="hidden">
+    <h2>About This Web Application</h2>
+    <p>
+      This platform is designed to improve disaster preparedness and emergency coordination across India.
+      It includes features like:
+    </p>
+    <ul>
+      <li>AI-powered disaster prediction and analysis</li>
+      <li>Real-time data from government and weather agencies</li>
+      <li>Support for multiple types of disasters including biological, nuclear, and environmental</li>
+      <li>Integrated backend with agent-based disaster response framework</li>
+      <li>Historical records for learning and improving future response plans</li>
+      <li>Citizen helpline integration for quick communication and help</li>
+    </ul>
+  </div>
+
+  <!-- DISASTERS -->
+<div id="disasters" class="hidden">
+  <h2 class="section-title">Types of Disasters</h2>
+  <div class="disasters">
+    <div class="card">
+      <h3>Natural Disasters</h3>
+      <p>Earthquakes, Cyclones, Tsunamis, Floods, Heatwaves, Droughts</p>
+    </div>
+    <div class="card">
+      <h3>Man-made Disasters</h3>
+      <p>Fires, Chemical Leaks, Nuclear Accidents, Terrorist Attacks, Industrial Hazards</p>
+    </div>
+  </div>
+
+  <h2 class="section-title">Major Disasters in History</h2>
+  <div class="disasters">
+
+    <div class="card" onclick="openModal('tsunami')">
+      <h3>2004 Indian Ocean Tsunami</h3>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/2004-tsunami.jpg" alt="2004 Tsunami">
+      <p>One of the deadliest tsunamis after a 9.1 M earthquake. Over 230,000 lives lost in 14 countries.</p>
+    </div>
+
+    <div class="card" onclick="openModal('bhopal')">
+      <h3>Bhopal Gas Tragedy (1984)</h3>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Bhopal_Gas_Tragedy_Memorial.jpg" alt="Bhopal Gas Tragedy">
+      <p>Methyl isocyanate leak in Bhopal, India. Roughly 15,000–20,000 died immediately, countless impacted.</p>
+    </div>
+
+    <div class="card" onclick="openModal('kerala')">
+      <h3>Kerala Floods (2018)</h3>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Kerala_floods_2018.jpg" alt="Kerala Floods 2018">
+      <p>Unprecedented monsoon rains led to severe flooding. 483 deaths and devastating infrastructure damage.</p>
+    </div>
+
+    <div class="card" onclick="openModal('odisha')">
+      <h3>Odisha Super Cyclone (1999)</h3>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Cyclone_05B_29_oct_1999_0600Z.png" alt="Odisha Cyclone 1999">
+      <p>A category-5 cyclone—winds over 260 km/h, 10,000+ deaths and widespread destruction.</p>
+    </div>
+  </div>
+</div>
+
+  <!-- AGENTS -->
+  <div id="agents" class="hidden">
+    <h2 class="section-title">Disaster Response Agencies</h2>
+    <div class="agents">
+      <div class="card"><h3>NDMA</h3><p>National Disaster Management Authority</p></div>
+      <div class="card"><h3>SDMA</h3><p>State Disaster Management Authorities</p></div>
+      <div class="card"><h3>NDRF</h3><p>National Disaster Response Force</p></div>
+    </div>
+  </div>
+
+  <!-- BACKEND OUTPUT -->
+  <div id="backend" class="hidden">
+    <h2 class="section-title">Real-time Backend Agent Output</h2>
+    <div class="backend-flex" id="backendOutput">Fetching backend data...</div>
+  </div>
+
+  <!-- HELPLINE -->
+  <div id="helpline" class="hidden">
+    <h2 class="section-title">Emergency Helplines</h2>
+    <div class="helpline">
+      <div class="card"><h3>All India Helpline</h3><p>+91-112</p></div>
+      <div class="card"><h3>Police: 100 | Fire: 101 | Ambulance: 102</h3></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2025 Indian Disaster Response System | All Rights Reserved
+</footer>
+
+<!-- MODALS -->
+<div id="tsunami" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('tsunami')">&times;</span><h2>2004 Tsunami</h2><p>A devastating 9.1 magnitude earthquake triggered massive waves, killing over 230,000 people.</p></div></div>
+<div id="bhopal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('bhopal')">&times;</span><h2>Bhopal Gas Tragedy</h2><p>The world's worst industrial disaster causing severe health damage to over half a million people.</p></div></div>
+<div id="covid" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('covid')">&times;</span><h2>COVID-19 Pandemic</h2><p>A global pandemic that changed the world; millions lost their lives due to the deadly virus outbreak.</p></div></div>
+<div id="odisha" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('odisha')">&times;</span><h2>Odisha Super Cyclone</h2><p>India's most severe cyclone in 1999 killed 10,000 people, leaving millions homeless.</p></div></div>
+
+<script>
+  function validateAndWelcome() {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    if (name && email && phone) {
+      document.getElementById("login").classList.add("hidden");
+      document.getElementById("navbar").style.display = "block";
+      document.getElementById("welcomeMsg").innerText = `Welcome, ${name}!`;
+      showSection('home');
+    } else {
+      alert("Please fill all fields.");
+    }
+  }
+
+  function logout() {
+    document.getElementById("navbar").style.display = "none";
+    showSection('login');
+    alert("You have logged out.");
+  }
+
+  function showSection(sectionId) {
+    ['home', 'about', 'disasters', 'agents', 'backend', 'helpline', 'login'].forEach(id =>
+      document.getElementById(id)?.classList.add("hidden"));
+    document.getElementById(sectionId).classList.remove("hidden");
+    if (sectionId === 'backend') fetchBackendData();
+  }
+
+  function fetchBackendData() {
+    fetch('http://127.0.0.1:5000/run-agents')
+      .then(res => res.json())
+      .then(data => {
+        const backendHTML = `
+          <div class="backend-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Kerala_floods_2018.jpg" alt="Kerala">
+            <h4>Kerala</h4>
+            <p>Risk Zone, Rescue, Supply Sent</p>
+          </div>
+          <div class="backend-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/63/Bihar_floods_2017.jpg" alt="Bihar">
+            <h4>Bihar</h4>
+            <p>Risk Zone, Rescue, Supply Sent</p>
+          </div>
+          <div class="backend-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Cyclone_05B_29_oct_1999_0600Z.png" alt="Odisha">
+            <h4>Odisha</h4>
+            <p>Risk Zone, Rescue, Supply Sent</p>
+          </div>
+          <div class="backend-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/West_Bengal_cyclone.jpg" alt="West Bengal">
+            <h4>West Bengal</h4>
+            <p>Risk Zone, Rescue, Supply Sent</p>
+          </div>
+          <div class="backend-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Kedarnath_Temple_after_floods.jpg" alt="Uttarakhand">
+            <h4>Uttarakhand</h4>
+            <p>Risk Zone, Rescue, Supply Sent</p>
+          </div>
+        `;
+        document.getElementById("backendOutput").innerHTML = backendHTML;
+      })
+      .catch(() => {
+        document.getElementById("backendOutput").innerText = "Error loading backend data.";
+      });
+  }
+
+  function openModal(id) {
+    document.getElementById(id).style.display = 'block';
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
